@@ -13,12 +13,12 @@ async function main() {
     if (filePath.endsWith(".pdf") || file.includes("old")) {
       continue;
     }
-    const data = await fs.readFile(filePath);
+    const data = await Bun.file(filePath).text();
 
     try {
       const parsed = await simpleParser(data);
       const sender = parsed.from.value[0].address;
-      const recipient = parsed.to.value[0].address;
+      // const recipient = parsed.to.value[0].address;
 
       const senderDomain = sender.split("@")[1].toLowerCase();
 
