@@ -71,7 +71,11 @@ func main() {
 		senderDomain := strings.Split(emailAddr, "@")[1]
 
 		if senderDomain == "fotball.no" {
-			fmt.Printf("Email from %s found in %s\n", emailAddr, entry.Name())
+			content := "Email from " + emailAddr + " found in " + entry.Name() + "\n"
+			err := appendToFile("fotball.txt", content)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 }
@@ -101,4 +105,15 @@ func parseEmailAddress(address string) (string, error) {
 		return "", err
 	}
 	return addr.Address, nil
+}
+
+func appendToFile(filename, content string) error {
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	_, err = f.WriteString(content)
+	return err
 }
