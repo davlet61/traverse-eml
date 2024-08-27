@@ -35,6 +35,34 @@ var charsetDecoders = map[string]encoding.Encoding{
 }
 
 func main() {
+	// processEmails()
+	processEhf()
+}
+
+func processEhf() {
+	dir, err := os.ReadDir("./ehf/ehf/")
+	if err != nil {
+		log.Fatalf("Failed to read directory: %v", err)
+	}
+
+	for _, entry := range dir {
+		if entry.IsDir() {
+			continue
+		}
+
+		filePath := "ehf/ehf/" + entry.Name()
+		msg, err := os.ReadFile(filePath)
+		if err != nil {
+			log.Fatalf("Failed to read file %s: %v", entry.Name(), err)
+		}
+
+		if strings.Contains(string(msg), "PRIMERO") {
+			fmt.Printf("Entry in %s contains 'PRIMERO'\n", entry.Name())
+		}
+	}
+}
+
+func processEmails() {
 	dir, err := os.ReadDir("./emails")
 	if err != nil {
 		log.Fatal(err)
@@ -69,6 +97,10 @@ func main() {
 		}
 
 		senderDomain := strings.Split(emailAddr, "@")[1]
+
+		if strings.Contains(emailAddr, "fotball.no") {
+			fmt.Printf("Email from %s found in %s\n", emailAddr, entry.Name())
+		}
 
 		if senderDomain == "fotball.no" {
 			content := "Email from " + emailAddr + " found in " + entry.Name() + "\n"
