@@ -40,7 +40,7 @@ func main() {
 }
 
 func processEhf() {
-	dir, err := os.ReadDir("./ehf/ehf/")
+	dir, err := os.ReadDir("./ehf/")
 	if err != nil {
 		log.Fatalf("Failed to read directory: %v", err)
 	}
@@ -50,7 +50,7 @@ func processEhf() {
 			continue
 		}
 
-		filePath := "ehf/ehf/" + entry.Name()
+		filePath := "ehf/" + entry.Name()
 		msg, err := os.ReadFile(filePath)
 		if err != nil {
 			log.Fatalf("Failed to read file %s: %v", entry.Name(), err)
